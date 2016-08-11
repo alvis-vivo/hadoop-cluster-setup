@@ -1,3 +1,1 @@
-# hadoop-cluster-setup
-procedure of hadoop-setup
-jaj
+本文档主要记载cdh集群搭建中的需要注意的事项
