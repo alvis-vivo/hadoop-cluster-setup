@@ -39,6 +39,4 @@ The Cloudera Manager Server, Oozie Server, Sqoop Server, Activity Monitor, Repor
 
 > ######You can install the database and services on different hosts.Separating databases from services is more likely in larger deployments and in cases where more sophisticated database administrators choose such a configuration. For example, databases and services might be separated if your environment includes Oracle databases that are managed separately by Oracle database administrators.
 ------------
- 
-Setting up the Cloudera Manager Server Database
 
