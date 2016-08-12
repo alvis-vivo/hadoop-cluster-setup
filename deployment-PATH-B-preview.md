@@ -86,8 +86,7 @@ multihoming. In addition, unknown issues can arise because multihoming is not co
 partner appliances.
 
 * Cluster hosts must have a working network name resolution system and correctly formatted /etc/hosts file. All cluster hosts must have properly configured forward and reverse host resolution through DNS. The /etc/hosts files must:
-
-Contain consistent information about hostnames and IP addresses across all hosts
+**Contain consistent information about hostnames and IP addresses across all hosts**
 >* Not contain uppercase hostnames
 >* Not contain duplicate IP addresses
 >* Cluster hosts must not use aliases, either in /etc/hosts or in configuring DNS.
@@ -99,6 +98,6 @@ Contain consistent information about hostnames and IP addresses across all hosts
 
 * Cloudera Manager can install them for you on all of the hosts in your cluster. If you choose Cloudera Manager installation, you can select installation using packages or Cloudera Manager parcels. In order for Cloudera Manager to automate installation of Cloudera Manager Agent packages or CDH and managed service software, cluster hosts must satisfy the following requirements:
 
-* Allow the Cloudera Manager Server host to have uniform SSH access on the same port to all hosts. See Networking and Security Requirements for further information.
+>* Allow the Cloudera Manager Server host to have uniform SSH access on the same port to all hosts. See Networking and Security Requirements for further information.
 
-* All hosts must have access to standard package repositories and either archive.cloudera.com or a local repository with the required installation files.
+>* All hosts must have access to standard package repositories and either archive.cloudera.com or a local repository with the required installation files.
