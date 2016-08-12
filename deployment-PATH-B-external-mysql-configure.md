@@ -5,17 +5,17 @@ MySQL Database
 To use a MySQL database, follow these procedures.
 
 -----------------
-* Installing the MySQL Server
+1. Installing the MySQL Server
 
-* Configuring and Starting the MySQL Server
+2. Configuring and Starting the MySQL Server
 
-* Installing the MySQL JDBC Driver
+3. Installing the MySQL JDBC Driver
 
-* Creating Databases for Activity Monitor, Reports Manager, Hive Metastore Server, Sentry Server, Cloudera Navigator Audit Server, and Cloudera Navigator Metadata Server
+4. Creating Databases for Activity Monitor, Reports Manager, Hive Metastore Server, Sentry Server, Cloudera Navigator Audit Server, and Cloudera Navigator Metadata Server
 
-* Configuring the Hue Server to Store Data in MySQL
+5. Configuring the Hue Server to Store Data in MySQL
 
-* Configuring MySQL for Oozie
+6. Configuring MySQL for Oozie
 
 ---------------------------
 
@@ -23,42 +23,69 @@ To use a MySQL database, follow these procedures.
  
 ###Installing the MySQL Server
 
+```html
+Note:
+If you already have a MySQL database set up, you can skip to the section Configuring and Starting the MySQL Server to verify that your MySQL configurations meet the requirements for Cloudera Manager.
 
-######Note:
->###### If you already have a MySQL database set up, you can skip to the section Configuring and Starting the MySQL Server to verify that your MySQL configurations meet the requirements for Cloudera Manager.
->###### It is important that the datadir directory, which, by default, is /var/lib/mysql, is on a partition that has sufficient free space.
->###### Cloudera Manager installation fails if GTID-based replication is enabled in MySQL.
+It is important that the datadir directory, which, by default, is /var/lib/mysql, is on a partition that has sufficient free space.
+
+Cloudera Manager installation fails if GTID-based replication is enabled in MySQL.
+```
 
 
-1.Install the MySQL database. 
+
+
+1. Install the MySQL database. 
 
 `$ sudo yum install mysql-server `
 
-2.Configuring and Starting the MySQL Server,Stop the MySQL server if it is running. 
+
+
+
+2. Configuring and Starting the MySQL Server,Stop the MySQL server if it is running. 
 
 `$ sudo service mysqld stop `
 
-3.Move old InnoDB log files /var/lib/mysql/ib_logfile0 and /var/lib/mysql/ib_logfile1 out of /var/lib/mysql/ to a backup location.
 
-4.Determine the location of the option file, my.cnf.
 
-5.Update my.cnf so that it conforms to the following requirements: 
 
->* To prevent deadlocks, set the isolation level to read committed.
+3. Move old InnoDB log files /var/lib/mysql/ib_logfile0 and /var/lib/mysql/ib_logfile1 out of /var/lib/mysql/ to a backup location.
 
->* Configure the InnoDB engine. Cloudera Manager will not start if its tables are configured with the MyISAM engine. (Typically, tables revert to MyISAM if the InnoDB engine is misconfigured.) To check which engine your tables are using, run the following command from the MySQL shell: mysql> show table status;
 
->* The default settings in the MySQL installations in most distributions use conservative buffer sizes and memory usage. Cloudera Management Service roles need high write throughput because they might insert many records in the database. Cloudera recommends that you set the innodb_flush_method property to O_DIRECT.
+
+
+4. Determine the location of the option file, my.cnf.
+
+
+
+
+5. Update my.cnf so that it conforms to the following requirements: 
+
+>* To prevent deadlocks, set the isolation level to **read committed**.
+
+
+>* **Configure the InnoDB engine**. Cloudera Manager will not start if its tables are configured with the MyISAM engine. (Typically, tables revert to MyISAM if the InnoDB engine is misconfigured.) To check which engine your tables are using, run the following command from the MySQL shell: mysql> show table status;
+
+
+>* The default settings in the MySQL installations in most distributions use conservative buffer sizes and memory usage. Cloudera Management Service roles need high write throughput because they might insert many records in the database. Cloudera recommends that you **set the innodb_flush_method property to O_DIRECT**.
+
 
 >* Set the max_connections property according to the size of your cluster: 
 
->>> ◾Small clusters (fewer than 50 hosts) - You can store more than one database (for example, both the Activity Monitor and Service Monitor) on the same host. If you do this, you should: ◾Put each database on its own storage volume.
 
->>> ◾Allow 100 maximum connections for each database and then add 50 extra connections. For example, for two databases, set the maximum connections to 250. If you store five databases on one host (the databases for Cloudera Manager Server, Activity Monitor, Reports Manager, Cloudera Navigator, and Hive metastore), set the maximum connections to 550.
+>> ◾Small clusters (fewer than 50 hosts) - You can store more than one database (for example, both the Activity Monitor and Service Monitor) on the same host. If you do this, you should: ◾Put each database on its own storage volume.
 
->>> ◾Large clusters (more than 50 hosts) - Do not store more than one database on the same host. Use a separate host for each database/host pair. The hosts need not be reserved exclusively for databases, but each database should be on a separate host.
+
+>> ◾Allow 100 maximum connections for each database and then add 50 extra connections. For example, for two databases, set the maximum connections to 250. If you store five databases on one host (the databases for Cloudera Manager Server, Activity Monitor, Reports Manager, Cloudera Navigator, and Hive metastore), set the maximum connections to 550.
+
+
+>> ◾Large clusters (more than 50 hosts) - Do not store more than one database on the same host. Use a separate host for each database/host pair. The hosts need not be reserved exclusively for databases, but each database should be on a separate host.
+
+
 
 >* Binary logging is not a requirement for Cloudera Manager installations. Binary logging provides benefits such as MySQL replication or point-in-time incremental recovery after database restore. Examples of this configuration follow. For more information, see The Binary Log.
+
+
 
 Here is an option file with Cloudera recommended settings:
 
@@ -113,36 +140,39 @@ sql_mode=STRICT_ALL_TABLES
 ----------------
 
 
-6.If AppArmor is running on the host where MySQL is installed, you might need to configure AppArmor to allow MySQL to write to the binary.
+6. If AppArmor is running on the host where MySQL is installed, you might need to configure AppArmor to allow MySQL to write to the binary.
 
-7.Ensure the MySQL server starts at boot. 
+7. Ensure the MySQL server starts at boot. 
 
 `$ sudo /sbin/chkconfig mysqld on `
 `$ sudo /sbin/chkconfig --list mysqld mysqld 0:off 1:off 2:on 3:on 4:on 5:on 6:off `
+
 
 8.Start the MySQL server: 
 
 `$ sudo service mysqld start `
 
 
-9.Set the MySQL root password. In the following example, the current root password is blank. Press the Enter key when you're prompted for the root password. 
 
-`$ sudo /usr/bin/mysql_secure_installation`
-`[...]`
-`Enter current password for root (enter for none):`
-`OK, successfully used password, moving on...`
-`[...]`
-`Set root password? [Y/n] y`
-`New password:`
-`Re-enter new password:`
-`Remove anonymous users? [Y/n] Y`
-`[...]`
-`Disallow root login remotely? [Y/n] N`
-`[...]`
-`Remove test database and access to it [Y/n] Y`
-`[...]`
-`Reload privilege tables now? [Y/n] Y`
-`All done!`
+9.Set the MySQL root password. In the following example, the current root password is blank. Press the Enter key when you're prompted for the root password. 
+```html
+$ sudo /usr/bin/mysql_secure_installation
+[...]
+Enter current password for root (enter for none):
+OK, successfully used password, moving on...
+[...]
+Set root password? [Y/n] y
+New password:
+Re-enter new password:
+Remove anonymous users? [Y/n] Y
+[...]
+Disallow root login remotely? [Y/n] N
+[...]
+Remove test database and access to it [Y/n] Y
+[...]
+Reload privilege tables now? [Y/n] Y
+All done!
+```
 
 
  
