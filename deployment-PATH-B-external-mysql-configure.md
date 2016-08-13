@@ -35,16 +35,16 @@ Cloudera Manager installation fails if GTID-based replication is enabled in MySQ
 
 
 
-1. Install the MySQL database. 
+1.  Install the MySQL database. 
 
-`$ sudo yum install mysql-server `
+    `$ sudo yum install mysql-server `
 
 
 
 
 2. Configuring and Starting the MySQL Server,Stop the MySQL server if it is running. 
 
-`$ sudo service mysqld stop `
+    `$ sudo service mysqld stop `
 
 
 
@@ -55,8 +55,6 @@ Cloudera Manager installation fails if GTID-based replication is enabled in MySQ
 
 
 4. Determine the location of the option file, my.cnf.
-
-
 
 
 5. Update my.cnf so that it conforms to the following requirements: 
@@ -140,21 +138,21 @@ sql_mode=STRICT_ALL_TABLES
 ----------------
 
 
-6. If AppArmor is running on the host where MySQL is installed, you might need to configure AppArmor to allow MySQL to write to the binary.
+6.If AppArmor is running on the host where MySQL is installed, you might need to configure AppArmor to allow MySQL to write to the binary.
 
-7. Ensure the MySQL server starts at boot. 
+7.Ensure the MySQL server starts at boot. 
 
-`$ sudo /sbin/chkconfig mysqld on `
-`$ sudo /sbin/chkconfig --list mysqld mysqld 0:off 1:off 2:on 3:on 4:on 5:on 6:off `
-
+    `$ sudo /sbin/chkconfig mysqld on `
+    `$ sudo /sbin/chkconfig --list mysqld mysqld 0:off 1:off 2:on 3:on 4:on 5:on 6:off `
 
 8.Start the MySQL server: 
 
-`$ sudo service mysqld start `
+    `$ sudo service mysqld start `
 
 
 
 9.Set the MySQL root password. In the following example, the current root password is blank. Press the Enter key when you're prompted for the root password. 
+
 ```html
 $ sudo /usr/bin/mysql_secure_installation
 [...]
@@ -185,23 +183,26 @@ Install the JDBC driver on the Cloudera Manager Server host, as well as hosts to
 Note: If you already have the JDBC driver installed on the hosts that need it, you can skip this section. However, MySQL 5.6 requires a driver version 5.1.26 or higher.
 ````
 
-Cloudera recommends that you assign all roles that require databases on the same host and install the driver on that host. Locating all such roles on the same host is recommended but not required. If you install a role, such as Activity Monitor, on one host and other roles on a separate host, you would install the JDBC driver on each host running roles that access the database. 
+**Cloudera recommends that you assign all roles that require databases on the same host and install the driver on that host**. Locating all such roles on the same host is recommended but not required. If you install a role, such as Activity Monitor, on one host and other roles on a separate host, you would install the JDBC driver on each host running roles that access the database. 
 
 
-1.Download the MySQL JDBC driver from http://www.mysql.com/downloads/connector/j/5.1.html.
+1. Download the MySQL JDBC driver from http://www.mysql.com/downloads/connector/j/5.1.html.
 
-2.Extract the JDBC driver JAR file from the downloaded file. 
+2. Extract the JDBC driver JAR file from the downloaded file. 
 
- For example: `tar zxvf mysql-connector-java-5.1.31.tar.gz`
+   For example: `tar zxvf mysql-connector-java-5.1.31.tar.gz`
  
-3.Copy the JDBC driver, renamed, to the relevant host. For example:
+3. Copy the JDBC driver, renamed, to the relevant host. For example:
 
-`$ sudo cp mysql-connector-java-5.1.31/mysql-connector-java-5.1.31-bin.jar /usr/share/java/mysql-connector-java.jar`
+   `$ sudo cp mysql-connector-java-5.1.31/mysql-connector-java-5.1.31-bin.jar /usr/share/java/mysql-connector-java.jar`
 
-If the target directory does not yet exist on this host, you can create it before copying the JAR file. For example:
+   If the target directory does not yet exist on this host, you can create it before copying the JAR file. For example:
 
-` sudo mkdir -p /usr/share/java/`
-`$ sudo cp mysql-connector-java-5.1.31/mysql-connector-java-5.1.31-bin.jar /usr/share/java/mysql-connector-java.jar`
+   ` sudo mkdir -p /usr/share/java/`
+
+   `$ sudo cp mysql-connector-java-5.1.31/mysql-connector-java-5.1.31-bin.jar /usr/share/java/mysql-connector-java.jar`
+
+
 
 ```html
 ote: Do not use the yum install command to install the MySQL driver package, because it installs openJDK, and then uses the Linux alternatives command to set the system JDK to be openJDK.
@@ -210,35 +211,39 @@ ote: Do not use the yum install command to install the MySQL driver package, bec
 
 
 
-Return to Establish Your Cloudera Manager Repository Strategy.
+####Return to Establish Your Cloudera Manager Repository Strategy.
 
  
 Creating Databases for Activity Monitor, Reports Manager, Hive Metastore Server, Sentry Server, Cloudera Navigator Audit Server, and Cloudera Navigator Metadata Server
 
 
- Create databases and user accounts for components that require databases: •If you are not using the Cloudera Manager installer, the Cloudera Manager Server.
-•Cloudera Management Service roles: ◦Activity Monitor (if using the MapReduce service)
-◦Reports Manager
-
-•Each Hive metastore
-•Sentry Server
-•Cloudera Navigator Audit Server
-•Cloudera Navigator Metadata Server
+Create databases and user accounts for components that require databases: 
+ 
+>* If you are not using the Cloudera Manager installer, the Cloudera Manager Server.
+>* Cloudera Management Service roles: ◦Activity Monitor (if using the MapReduce service)
+>* Reports Manager
+>* Each Hive metastore
+>* Sentry Server
+>* Cloudera Navigator Audit Server
+>* Cloudera Navigator Metadata Server
 
 You can create these databases on the host where the Cloudera Manager Server will run, or on any other hosts in the cluster. For performance reasons, you should install each database on the host on which the service runs, as determined by the roles you assign during installation or upgrade. In larger deployments or in cases where database administrators are managing the databases the services use, you can separate databases from services, but use caution.
 
-The database must be configured to support UTF-8 character set encoding.
+*The database must be configured to support UTF-8 character set encoding.*
 
 Record the values you enter for database names, usernames, and passwords. The Cloudera Manager installation wizard requires this information to correctly connect to these databases.
 
- 1.Log into MySQL as the root user: $ mysql -u root -p
-Enter password:
+ 1.Log into MySQL as the root user: 
+ `$ mysql -u root -p`
+ `Enter password:`
 
-2.Create databases for the Activity Monitor, Reports Manager, Hive Metastore Server, Sentry Server, Cloudera Navigator Audit Server, and Cloudera Navigator Metadata Server: mysql> create database database DEFAULT CHARACTER SET utf8;
-Query OK, 1 row affected (0.00 sec)
+2.Create databases for the Activity Monitor, Reports Manager, Hive Metastore Server, Sentry Server, Cloudera Navigator Audit Server, and Cloudera Navigator Metadata Server:
+`mysql> create database database DEFAULT CHARACTER SET utf8;`
+`Query OK, 1 row affected (0.00 sec)`
 
-mysql> grant all on database.* TO 'user'@'%' IDENTIFIED BY 'password';
-Query OK, 0 rows affected (0.00 sec)
+`mysql> grant all on database.* TO 'user'@'%' IDENTIFIED BY 'password';`
+`Query OK, 0 rows affected (0.00 sec)`
+
 database, user, and password can be any value. The examples match the default names provided in the Cloudera Manager configuration settings: 
 
 
