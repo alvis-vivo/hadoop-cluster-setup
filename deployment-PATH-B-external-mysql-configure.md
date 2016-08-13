@@ -211,7 +211,7 @@ ote: Do not use the yum install command to install the MySQL driver package, bec
 
 
 
-####Return to Establish Your Cloudera Manager Repository Strategy.
+###Return to Establish Your Cloudera Manager Repository Strategy.
 
  
 Creating Databases for Activity Monitor, Reports Manager, Hive Metastore Server, Sentry Server, Cloudera Navigator Audit Server, and Cloudera Navigator Metadata Server
@@ -245,80 +245,89 @@ Record the values you enter for database names, usernames, and passwords. The Cl
 `Query OK, 0 rows affected (0.00 sec)`
 
 database, user, and password can be any value. The examples match the default names provided in the Cloudera Manager configuration settings: 
+<table>
+  <tr><td>Role</td><td>Database</td><td>User</td><td>Password</td></tr>
+ <tr><td>Activity Monitor</td><td>amon</td><td>amon</td><td>amon_password</td></tr>
+ <tr><td>Reports Manager</td><td>rman</td><td>rman</td><td>rman_password</td></tr>
+ <tr><td>Hive Metastore Server</td><td>hive</td><td>hive</td><td>hive_password</td></tr>
+ <tr><td>Sentry Server</td><td>sentry</td><td>sentry</td><td>sentry_password</td></tr>
+ <tr><td>Cloudera Navigator Audit Server</td><td>nav</td><td>nav</td><td>nav_password</td></tr>
+ <tr><td>Cloudera Navigator Metadata Server</td><td>navms</td><td>navms</td><td>navms_password</td></tr>
+</table>
 
 
-Role
 
-Database
-
-User
-
-Password
-
-
-Activity Monitor amon amon amon_password 
-Reports Manager rman rman rman_password 
-Hive Metastore Server metastore hive hive_password 
-Sentry Server sentry sentry sentry_password 
-Cloudera Navigator Audit Server nav nav nav_password 
-Cloudera Navigator Metadata Server navms navms navms_password 
 
 
  
-Configuring the Hue Server to Store Data in MySQL
+###Configuring the Hue Server to Store Data in MySQL
 
-
-Note: Cloudera recommends InnoDB over MyISAM as the Hue MySQL engine. On CDH 5, Hue requires InnoDB.
+```html Note: Cloudera recommends InnoDB over MyISAM as the Hue MySQL engine. On CDH 5, Hue requires InnoDB.```
 
 For information about installing and configuring a MySQL database , see MySQL Database.
 
-1.In the Cloudera Manager Admin Console, go to the Hue service status page.
-2.Select Actions > Stop. Confirm you want to stop the service by clicking Stop.
-3.Select Actions > Dump Database. Confirm you want to dump the database by clicking Dump Database.
-4.Note the host to which the dump was written under Step in the Dump Database Command window. You can also find it by selecting Commands > Recent Commands > Dump Database.
-5.Open a terminal window for the host and go to the dump file in /tmp/hue_database_dump.json.
-6.Remove all JSON objects with useradmin.userprofile in the model field, for example: {
-"pk": 14,
-"model": "useradmin.userprofile",
-"fields":
-{ "creation_method": "EXTERNAL", "user": 14, "home_directory": "/user/tuser2" }
-},
+> 1.In the Cloudera Manager Admin Console, go to the Hue service status page.
+> 2.Select Actions > Stop. Confirm you want to stop the service by clicking Stop.
+> 3.Select Actions > Dump Database. Confirm you want to dump the database by clicking Dump Database.
+> 4.Note the host to which the dump was written under Step in the Dump Database Command window. You can also find it by selecting Commands > Recent Commands > Dump Database.
+> 5.Open a terminal window for the host and go to the dump file in /tmp/hue_database_dump.json.
+> 6.Remove all JSON objects with useradmin.userprofile in the model field, for example:
 
-7.Set strict mode in /etc/my.cnf and restart MySQL: [mysqld]
-sql_mode=STRICT_ALL_TABLES
+```html
+ {
+   "pk": 14,
+   "model": "useradmin.userprofile",
+   "fields":
+   { "creation_method": "EXTERNAL", "user": 14, "home_directory": "/user/tuser2" }
+   },```
 
-8.Create a new database and grant privileges to a Hue user to manage this database. For example: mysql> create database hue;
-Query OK, 1 row affected (0.01 sec)
-mysql> grant all on hue.* to 'hue'@'localhost' identified by 'secretpassword';
-Query OK, 0 rows affected (0.00 sec)
+> 7.Set strict mode in /etc/my.cnf and restart MySQL: 
 
-9.In the Cloudera Manager Admin Console, click the Hue service.
-10.Click the Configuration tab.
-11.Select Scope > All.
-12.Select Category > Database.
-13.Specify the settings for Hue Database Type, Hue Database Hostname, Hue Database Port, Hue Database Username, Hue Database Password, and Hue Database Name. For example, for a MySQL database on the local host, you might use the following values: ◦Hue Database Type = mysql
+ ` [mysqld]`
+ `sql_mode=STRICT_ALL_TABLES`
+
+> 8.Create a new database and grant privileges to a Hue user to manage this database. For example:
+
+  ` mysql> create database hue;`
+  ` Query OK, 1 row affected (0.01 sec)`
+  `mysql> grant all on hue.* to 'hue'@'localhost' identified by 'secretpassword';`
+  ` Query OK, 0 rows affected (0.00 sec)`
+
+> 9.In the Cloudera Manager Admin Console, click the Hue service.
+> 10.Click the Configuration tab.
+> 11.Select Scope > All.
+> 12.Select Category > Database.
+> 13.Specify the settings for Hue Database Type, Hue Database Hostname, Hue Database Port, Hue Database Username, Hue Database Password, and Hue Database Name. For example, for a MySQL database on the local host, you might use the following values: 
+
+◦Hue Database Type = mysql
 ◦Hue Database Hostname = host
 ◦Hue Database Port = 3306
 ◦Hue Database Username = hue
 ◦Hue Database Password = secretpassword
 ◦Hue Database Name = hue
 
-14.Optionally restore the Hue data to the new database: a.Select Actions > Synchronize Database.
-b.Determine the foreign key ID. $ mysql -uhue -psecretpassword
-mysql > SHOW CREATE TABLE auth_permission;
+> 14.Optionally restore the Hue data to the new database: 
+a.Select Actions > Synchronize Database.
+b.Determine the foreign key ID. 
+  `$ mysql -uhue -psecretpassword`
+  `mysql > SHOW CREATE TABLE auth_permission;`
 
-c.(InnoDB only) Drop the foreign key that you retrieved in the previous step. mysql > ALTER TABLE auth_permission DROP FOREIGN KEY content_type_id_refs_id_XXXXXX;
+c.(InnoDB only) Drop the foreign key that you retrieved in the previous step.
+  `mysql > ALTER TABLE auth_permission DROP FOREIGN KEY content_type_id_refs_id_XXXXXX;`
 
-d.Delete the rows in the django_content_type table. mysql > DELETE FROM hue.django_content_type;
+d.Delete the rows in the django_content_type table. 
+  `mysql > DELETE FROM hue.django_content_type;`
 
 e.In Hue service instance page, click Actions > Load Database. Confirm you want to load the database by clicking Load Database.
-f.(InnoDB only) Add back the foreign key. mysql > ALTER TABLE auth_permission ADD FOREIGN KEY (content_type_id) REFERENCES django_content_type (id);
+
+f.(InnoDB only) Add back the foreign key. 
+  `mysql > ALTER TABLE auth_permission ADD FOREIGN KEY (content_type_id) REFERENCES django_content_type (id);`
 
 
-15.Start the Hue service.
+> 15.Start the Hue service.
 
  
-Configuring MySQL for Oozie
+###Configuring MySQL for Oozie
 
 
  
@@ -326,7 +335,7 @@ Install and Start MySQL 5.x
 
  See MySQL Database.
 
- 
+```html
 Create the Oozie Database and Oozie MySQL User
 
 For example, using the MySQL mysql command-line tool:
@@ -343,12 +352,13 @@ mysql>  grant all privileges on oozie.* to 'oozie'@'%' identified by 'oozie';
 Query OK, 0 rows affected (0.03 sec)
 
 mysql> exit
-Bye
+Bye```
 
  
 Add the MySQL JDBC Driver JAR to Oozie
 
-Copy or symbolically link the MySQL JDBC driver JAR into one of the following directories: •For installations that use packages: /var/lib/oozie/
+Copy or symbolically link the MySQL JDBC driver JAR into one of the following directories:
+•For installations that use packages: /var/lib/oozie/
 •For installations that use parcels: /opt/cloudera/parcels/CDH/lib/oozie/lib/
 directory. 
 Note: You must manually download the MySQL JDBC driver JAR file.
