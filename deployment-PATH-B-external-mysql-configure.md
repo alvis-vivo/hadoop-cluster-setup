@@ -270,10 +270,16 @@ Note: Cloudera recommends InnoDB over MyISAM as the Hue MySQL engine. On CDH 5, 
 For information about installing and configuring a MySQL database , see MySQL Database.
 
 > 1.In the Cloudera Manager Admin Console, go to the Hue service status page.
+
 > 2.Select Actions > Stop. Confirm you want to stop the service by clicking Stop.
+
 > 3.Select Actions > Dump Database. Confirm you want to dump the database by clicking Dump Database.
-> 4.Note the host to which the dump was written under Step in the Dump Database Command window. You can also find it by selecting Commands > Recent Commands > Dump Database.
+
+> 4.Note the host to which the dump was written under Step in the Dump Database Command window. You can also find it by selecting
+Commands > Recent Commands > Dump Database.
+
 > 5.Open a terminal window for the host and go to the dump file in /tmp/hue_database_dump.json.
+
 > 6.Remove all JSON objects with useradmin.userprofile in the model field, for example:
 
 ```html
@@ -298,16 +304,25 @@ For information about installing and configuring a MySQL database , see MySQL Da
   ` Query OK, 0 rows affected (0.00 sec)`
 
 > 9.In the Cloudera Manager Admin Console, click the Hue service.
+
 > 10.Click the Configuration tab.
+
 > 11.Select Scope > All.
+
 > 12.Select Category > Database.
+
 > 13.Specify the settings for Hue Database Type, Hue Database Hostname, Hue Database Port, Hue Database Username, Hue Database Password, and Hue Database Name. For example, for a MySQL database on the local host, you might use the following values: 
 
 ◦Hue Database Type = mysql
+
 ◦Hue Database Hostname = host
+
 ◦Hue Database Port = 3306
+
 ◦Hue Database Username = hue
+
 ◦Hue Database Password = secretpassword
+
 ◦Hue Database Name = hue
 
 > 14.Optionally restore the Hue data to the new database: 
