@@ -238,6 +238,7 @@ Record the values you enter for database names, usernames, and passwords. The Cl
  `Enter password:`
 
 2.Create databases for the Activity Monitor, Reports Manager, Hive Metastore Server, Sentry Server, Cloudera Navigator Audit Server, and Cloudera Navigator Metadata Server:
+
 `mysql> create database database DEFAULT CHARACTER SET utf8;`
 `Query OK, 1 row affected (0.00 sec)`
 
@@ -262,7 +263,9 @@ database, user, and password can be any value. The examples match the default na
  
 ###Configuring the Hue Server to Store Data in MySQL
 
-```html Note: Cloudera recommends InnoDB over MyISAM as the Hue MySQL engine. On CDH 5, Hue requires InnoDB.```
+```html
+Note: Cloudera recommends InnoDB over MyISAM as the Hue MySQL engine. On CDH 5, Hue requires InnoDB.
+```
 
 For information about installing and configuring a MySQL database , see MySQL Database.
 
@@ -279,7 +282,8 @@ For information about installing and configuring a MySQL database , see MySQL Da
    "model": "useradmin.userprofile",
    "fields":
    { "creation_method": "EXTERNAL", "user": 14, "home_directory": "/user/tuser2" }
-   },```
+   },
+   ```
 
 > 7.Set strict mode in /etc/my.cnf and restart MySQL: 
 
