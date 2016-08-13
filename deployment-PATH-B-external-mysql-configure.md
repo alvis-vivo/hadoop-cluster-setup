@@ -311,7 +311,9 @@ For information about installing and configuring a MySQL database , see MySQL Da
 ◦Hue Database Name = hue
 
 > 14.Optionally restore the Hue data to the new database: 
+
 a.Select Actions > Synchronize Database.
+
 b.Determine the foreign key ID. 
   `$ mysql -uhue -psecretpassword`
   `mysql > SHOW CREATE TABLE auth_permission;`
