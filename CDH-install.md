@@ -60,7 +60,9 @@
 3.启动mysql，并设置开机启动
 
 	`service mysqld start`
+	
 	`/sbin/chkconfig mysqld on`
+	
 	`/sbin/chkconfig --list mysqld`
 
 
@@ -100,7 +102,9 @@
 
 4.解压文件
 	`tar xvfz cm5.0.0-centos6.tar.gz`
+	
 	`mv cm /var/www/html`
+	
 	`chmod -R ugo+rX /var/www/html/cm`
 
 5.配置repo文件 /etc/yum.repos.d/myrepo.repo
