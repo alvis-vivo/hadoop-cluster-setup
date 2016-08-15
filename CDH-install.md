@@ -73,9 +73,58 @@ sql_mode=STRICT_ALL_TABLES
 	`cp mysql-connector-java-5.1.34.jar  /usr/share/java/mysql-connector-java.jar`
 	
 
-6. 配置 mysql中cm server 账号密码
+6.配置 mysql中cm server 账号密码(该步骤在安装cm server 结束后进行)
 	`mysql> grant all on *.* to 'temp'@'%' identified by 'temp' with grant option;`
 	`/usr/share/cmf/schema/scm_prepare_database.sh mysql -h myhost1.sf.cloudera.com -utemp -ptemp --scm-host myhost2.sf.cloudera.com scm scm scm`
+
+
+
+==============
+本地源配置
+============
+
+
+1. 安装必要工具
+
+	`yum install httpd createrepo`
+	
+2.启动appache服务
+
+	`service httpd start`
+	
+3.下载cm文件 <http://archive.cloudera.com/cm5/repo-as-tarball/>
+
+4.解压文件
+	`tar xvfz cm5.0.0-centos6.tar.gz`
+	`mv cm /var/www/html`
+	`chmod -R ugo+rX /var/www/html/cm`
+
+5.配置repo文件 /etc/yum.repos.d/myrepo.repo
+	```html
+	[myrepo]
+	name=myrepo
+	baseurl=http://hostname/5.5.0/
+	enabled=1
+	gpgcheck=0
+```
+
+6.更新源
+
+	`yum update`
+
+
+
+=========
+安装cm
+========
+
+1.安装jdk
+
+	`yum install oracle-j2sdk1.7`
+	
+2.安装cm server
+
+	`yum install cloudera-manager-daemons cloudera-manager-server`
 
 
 
