@@ -137,7 +137,9 @@
 
 	`yum install cloudera-manager-daemons cloudera-manager-server`
 
+3.**配置cm mysql账号后**，启动服务
 
+	`service cloudera-scm-server start`
 
 
 
