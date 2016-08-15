@@ -7,7 +7,7 @@
 
 2.配置mysql配置文件 /etc/my.cnf
 
-```html
+	```html
 	[mysqld]
 	transaction-isolation = READ-COMMITTED
 	# Disabling symbolic-links is recommended to prevent assorted security risks;
@@ -53,7 +53,7 @@
 	
 
 	sql_mode=STRICT_ALL_TABLES
-```
+	```
 
 3.启动mysql，并设置开机启动
 
