@@ -8,6 +8,7 @@
 2.配置mysql配置文件 /etc/my.cnf
 
 	```html
+	
 	[mysqld]
 	transaction-isolation = READ-COMMITTED
 	# Disabling symbolic-links is recommended to prevent assorted security risks;
@@ -53,6 +54,7 @@
 	
 
 	sql_mode=STRICT_ALL_TABLES
+	
 	```
 
 3.启动mysql，并设置开机启动
@@ -104,11 +106,13 @@
 5.配置repo文件 /etc/yum.repos.d/myrepo.repo
 
 	```html
+	
 	[myrepo]
 	name=myrepo
 	baseurl=http://hostname/5.5.0/
 	enabled=1
 	gpgcheck=0
+	
 	```
 
 6.更新源
