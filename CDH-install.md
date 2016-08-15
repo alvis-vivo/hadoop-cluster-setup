@@ -141,5 +141,12 @@
 
 	`service cloudera-scm-server start`
 
+4.观察log，看是否有异常
+
+	`tail -F cloudera-scm-server.log`
+	
+5. 登录web ui http://hostname:7180,初始用户名密码都是admin
+
+
 
 
