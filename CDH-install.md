@@ -1,11 +1,11 @@
 =========
 数据库准备
 =========
-1. 安装mysql
+1.安装mysql
 
-`yum install mysql-server`
+	`yum install mysql-server`
 
-2. 配置mysql配置文件 /etc/my.cnf
+2.配置mysql配置文件 /etc/my.cnf
 
 ```html
 
@@ -56,22 +56,26 @@
 sql_mode=STRICT_ALL_TABLES
 ```
 
-3. 启动mysql，并设置开机启动
+3.启动mysql，并设置开机启动
 
-`	service mysqld start`
-`/sbin/chkconfig mysqld on`
-`/sbin/chkconfig --list mysqld`
+	`service mysqld start`
+	`/sbin/chkconfig mysqld on`
+	`/sbin/chkconfig --list mysqld`
 
 
-4. 初始化设置mysql,设置密码
+4.初始化设置mysql,设置密码
 
-`/usr/bin/mysql_secure_installation`
+	`/usr/bin/mysql_secure_installation`
 
-5. 配置jdbc
+5.配置jdbc,下载自<http://www.mysql.com/downloads/connector/j/5.1.html>，解压
 
-`mkdir  /usr/share/java`
-`cp mysql-connector-java-5.1.34.jar  /usr/share/java/mysql-connector-java.jar`
+	`mkdir  /usr/share/java`
+	`cp mysql-connector-java-5.1.34.jar  /usr/share/java/mysql-connector-java.jar`
+	
 
+6. 配置 mysql中cm server 账号密码
+	`mysql> grant all on *.* to 'temp'@'%' identified by 'temp' with grant option;`
+	`/usr/share/cmf/schema/scm_prepare_database.sh mysql -h myhost1.sf.cloudera.com -utemp -ptemp --scm-host myhost2.sf.cloudera.com scm scm scm`
 
 
 
